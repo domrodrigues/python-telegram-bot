@@ -1,0 +1,41 @@
+import logging
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+
+# Substitua 'YOUR_BOT_TOKEN' pelo token do seu bot.
+TOKEN = '6660015197:AAFerd_oABK4WoyG5WAaq3AP1kZbza1USSE'
+
+# Configuração do registro para depuração.
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+
+# Criando o objeto Updater e o objeto Dispatcher.
+updater = Updater(token=TOKEN, use_context=True)
+dispatcher = updater.dispatcher
+
+# Função para manipular o comando /start.
+def start(update: Update, context: CallbackContext):
+    update.message.reply_text("Bem-vindo ao Bot de Sinais! Use /comprar ou /vender para receber sinais.")
+
+# Função para manipular o comando /comprar.
+def buy_signal(update: Update, context: CallbackContext):
+    update.message.reply_text("Sinal de Compra: ABC Company")
+
+# Função para manipular o comando /vender.
+def sell_signal(update: Update, context: CallbackContext):
+    update.message.reply_text("Sinal de Venda: XYZ Company")
+
+# Função para responder a mensagens de texto.
+def echo(update: Update, context: CallbackContext):
+    update.message.reply_text("Desculpe, não entendi o que você quer. Use /comprar ou /vender para receber sinais.")
+
+# Adicionando comandos e manipuladores ao Dispatcher.
+dispatcher.add_handler(CommandHandler("start", start))
+dispatcher.add_handler(CommandHandler("comprar", buy_signal))
+dispatcher.add_handler(CommandHandler("vender", sell_signal))
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+# Inicie o bot.
+updater.start_polling()
+
+# Mantenha o bot em execução até que você o pare manualmente.
+updater.idle()
